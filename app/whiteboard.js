@@ -13,9 +13,9 @@ function Whiteboard(options) {
     // go look here first :
     // http://famo.us/docs/0.2.0/inputs/GenericSync/
     // http://famo.us/docs/0.2.0/inputs/MouseSync
-    this.on('mousedown', drawEvent.bind(this, 'start'));
-    this.on('mousemove', drawEvent.bind(this, 'move'));
-    this.on('mouseup', drawEvent.bind(this, 'end'));
+    this._eventOutput.on('mousedown', drawEvent.bind(this, 'start'));
+    this._eventOutput.on('mousemove', drawEvent.bind(this, 'move'));
+    this._eventOutput.on('mouseup', drawEvent.bind(this, 'end'));
 
     function drawEvent(type, evt) {
         this.draw(evt.offsetX, evt.offsetY, type);

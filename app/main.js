@@ -17,10 +17,12 @@ var Whiteboard = require('./whiteboard');
 var mainContext = Engine.createContext();
 
 var rootModifier = new Modifier({
-  origin: [0.5, 0.5],
-  size: function() { return mainContext.getSize(); }
+  //size: function() { mainContext.getSize(); },
+ // origin: [0.5, 0.5]
 });
 
-var whiteboard = new Whiteboard();
+var whiteboard = new Whiteboard({
+  properties: { backgroundColor: 'lightgrey' }
+});
 
 mainContext.add(rootModifier).add(whiteboard);
