@@ -1,0 +1,19 @@
+{
+  "name": "aetherboard",
+  "version": "0.0.1",
+  "description": "Collaborative Whiteboard with microservices",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AetherBoard/AetherBoard.git"
+  },
+  "author": "Adrian Rossouw <adrian@daemon.co.za>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AetherBoard/AetherBoard/issues"
+  },
+  "homepage": "https://github.com/AetherBoard/AetherBoard"
+}
