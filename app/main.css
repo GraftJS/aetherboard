@@ -1,0 +1,13 @@
+/**
+ * Webpack lets us import css from npm modules.
+ */ 
+@import "~famous/core/famous.css";
+
+html {
+  background: #fff;
+}
+
+.double-sided {
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
+}
