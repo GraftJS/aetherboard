@@ -4,7 +4,8 @@
   "description": "Collaborative Whiteboard with microservices",
   "main": "server.js",
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha -R spec",
+    "prepublish": "webpack"
   },
   "repository": {
     "type": "git",
