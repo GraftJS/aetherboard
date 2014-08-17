@@ -50,6 +50,27 @@ or posted to an internal issue queue, or whatever.
 
 ---
 
+### Usage
+
+####Installation
+
+```bash
+npm install -g webpack webpack-dev-server # First install webpack  
+git clone https://github.com/AetherBoard/AetherBoard  
+rm -rf .git # optionally remove git history  
+npm install # install dependencies  
+```
+####Development
+Run the dev server with ```webpack-dev-server```
+
+Go to the dev server url : ```http://localhost:8080/webpack-dev-server/dist/bundle```
+
+####Production
+Build the deployable static assets with ```webpack```
+
+---
+
+
 ### High-level System Design
 
 #### Initialization
@@ -151,4 +172,7 @@ This is how the server builds one set of coordinates that get applied to the can
 Probably exists in the greater node streams ecosystem.  
 
 ---
+
+
 __... To Be Continued...__
+
