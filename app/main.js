@@ -9,20 +9,13 @@ require('famous-polyfills');
 require('./index.html');
 
 var Engine = require('famous/core/Engine');
-var Modifier = require('famous/core/Modifier');
-var Transform = require('famous/core/Transform');
-var Whiteboard = require('./whiteboard');
+var Interface = require('./interface');
 
 // create the main context
 var mainContext = Engine.createContext();
 
-var rootModifier = new Modifier({
-  //size: function() { mainContext.getSize(); },
- // origin: [0.5, 0.5]
+var interface = new Interface({
+  context: mainContext
 });
 
-var whiteboard = new Whiteboard({
-  properties: { backgroundColor: 'lightgrey' }
-});
-
-mainContext.add(rootModifier).add(whiteboard);
+mainContext.add(interface);
