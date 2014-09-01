@@ -1,3 +1,4 @@
+var Engine     = require('famous/core/Engine');
 var View       = require('famous/core/View');
 var Surface    = require('famous/core/Surface');
 var Modifier   = require('famous/core/Modifier');
@@ -69,7 +70,7 @@ Interface.prototype.addWhiteboard = function() {
 
   // initializa basic components
   this.whiteboard = {
-    surface: new Whiteboard({properties: {backgroundColor:'lightgrey'}}),
+    surface: new Whiteboard(),
     modifier: new Modifier()
   };
 
