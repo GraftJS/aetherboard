@@ -28,6 +28,6 @@
     "webpack-dev-server": "^1.4.10"
   },
   "dependencies": {
-    "jschan": "0.0.4"
+    "jschan": "0.0.6"
   }
 }
