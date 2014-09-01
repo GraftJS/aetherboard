@@ -22,10 +22,12 @@ var Canvas = require('canvas');
 var canvas = canvas(500, 500);
 
 // handle pubsub
-var broker = require('./lib/broker')(graft);
-var stream = broker.stream;
+var broker = require('./lib/broker')
+
 var through = require('through2');
 
+// the broker is just a service
+var stream = graft.pipe(broker());
 
 // we receive a subscribe message over graft
 stream.on('subscribe', function(req, done) {
