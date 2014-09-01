@@ -17,9 +17,12 @@ module.exports = function Input(sync) {
   });
 
   sync.on('update', function(data) {
-    var chunk = [data.offsetX, data.offsetY, data.delta, data.velocity];
+    var chunk = {
+      position: [data.offsetX, data.offsetY],
+      delta: data.delta,
+      velocity: data.velocity
+    };
     current.segments.push(chunk);
-
   });
 
   sync.on('end', function(data) {

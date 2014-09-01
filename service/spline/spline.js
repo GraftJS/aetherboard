@@ -1,36 +1,27 @@
 'use strict';
 
-var stream = require('stream');
 var ctx = require('./canvas')();
 var Spline = require('./bezier-spline');
+var through = require('through2');
 
 module.exports = function() {
-  var _ts = new stream.Transform({objectMode: true});
-  var _data = '';
-
-  _ts._transform = function(chunk, encoding, done) {
-    var points;
+  return through.obj(function(chunk, enc, done) {
+    console.log(chunk);
+    var points = [];
     var spline;
+    var that = this;
 
-    _data += chunk.toString();
-    try {
-      points = JSON.parse(_data);
-      _data = '';
-    }
-    catch (e){
-    }
-
-    if (_data.length === 0) {
+    chunk.pipe(through.obj(function(_data, enc, done) { 
+      points.push(_data);
+      done();
+    }, function() {
       spline = new Spline({points: points, duration:15000});
       spline.draw(ctx);
-      ctx.operations().forEach(function(operation) {
-        _ts.push(operation);
-      });
-    }
+      ctx.operations().forEach(function(operation) { that.push(operation); });
+      points = [];
+    }));
     done();
-  };
-
-  return _ts;
+  });
 };
 
 

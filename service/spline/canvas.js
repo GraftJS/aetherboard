@@ -1,12 +1,14 @@
 'use strict';
 
+var slice = Array.prototype.slice;
+
 module.exports = function() {
   var _operations = [];
 
 
   var recordOp = function(operation) {
     return function() {
-      _operations.push({operation: operation, args: arguments});
+      _operations.push([operation].concat(slice.call(arguments,0)));
     };
   };
 
