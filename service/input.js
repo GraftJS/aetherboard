@@ -1,11 +1,30 @@
-var through = require('through2');
+var Readable = require('readable-stream').Readable;
 
-module.exports = function Input(emitter) {
+module.exports = function Input(sync) {
+  var current;
+  var strokes = new Readable({objectMode: true});
 
-  return through.obj(inputHandleFn);
+  strokes._read = function() {};
 
-  function inputHandleFn(chunk, enc, end) {
-    this.push(chunk);
-    end();
-  }
+  sync.on('start', function(data) {
+    current = {
+      size: 0.5,
+      color: 1,
+      segments: new Readable({objectMode: true})
+    };
+    current.segments._read = function() {};
+    strokes.push(current);
+  });
+
+  sync.on('update', function(data) {
+    var chunk = [data.offsetX, data.offsetY, data.delta, data.velocity];
+    current.segments.push(chunk);
+
+  });
+
+  sync.on('end', function(data) {
+    current.segments.push(null);
+  });
+
+  return strokes;
 };

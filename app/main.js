@@ -9,7 +9,22 @@ require('famous-polyfills');
 require('./index.html');
 
 var Engine = require('famous/core/Engine');
+
 var Interface = require('./interface');
+var sync = require('./sync');
+var input = require('../service/input');
+
+var through = require('through2');
+
+input(sync).pipe(through.obj(function(chunk, enc, done) {
+  chunk.segments.pipe(through.obj(log));
+  done();
+}));
+
+function log(chunk, enc, done) {
+  console.log(chunk);
+  done();
+}
 
 // create the main context
 var mainContext = Engine.createContext();

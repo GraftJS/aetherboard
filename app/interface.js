@@ -11,25 +11,12 @@ function Interface(options) {
   this.context = options.context;
 
   this.addRoot();
-  this.addInputLayer();
+//  this.addInputLayer();
   this.addWhiteboard();
-  this.registerEvents();
-
 }
 
 Interface.prototype = Object.create(View.prototype);
 Interface.prototype.constructor = Interface;
-
-Interface.prototype.registerEvents = function() {
-  this._eventInput.on('mousedown', drawEvent.bind(this, 'start'));
-  this._eventInput.on('mousemove', drawEvent.bind(this, 'move'));
-  this._eventInput.on('mouseup', drawEvent.bind(this, 'end'));
-
-  function drawEvent(type, evt) {
-    this.whiteboard.surface.draw(evt.offsetX, evt.offsetY, type);
-  }
-};
-
 
 /**
 * Add a root modifier that all other nodes are attached to.
@@ -70,7 +57,9 @@ Interface.prototype.addWhiteboard = function() {
 
   // initializa basic components
   this.whiteboard = {
-    surface: new Whiteboard(),
+    surface: new Whiteboard({
+      size: [500, 500]
+    }),
     modifier: new Modifier()
   };
 

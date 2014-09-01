@@ -6,6 +6,7 @@
 html {
   background: #fff;
 }
+canvas { border: 1px solid black; }
 
 .double-sided {
   -webkit-backface-visibility: visible;

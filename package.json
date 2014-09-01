@@ -30,6 +30,7 @@
   "dependencies": {
     "canvas": "^1.1.6",
     "graft": "0.0.2",
+    "highland": "^1.28.0",
     "readable-stream": "^1.0.31",
     "through2": "^0.6.1"
   }
