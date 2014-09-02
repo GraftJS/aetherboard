@@ -5,7 +5,15 @@
 * everybody's input into a single stream
 * of changes to be applied everywhere.
 */
-var graft = require('graft')();
+var through = require('through2');
+//
+// shared canvas.
+var Canvas = require('canvas');
+var canvas = canvas(500, 500);
+
+// Set up main graft instance
+var Graft = require('graft');
+var graft = Graft();
 
 // listen on websockets, in addition to in-mem
 var ws = require('graft/websocket');
@@ -15,22 +23,18 @@ server.pipe(graft);
 
 // individual stream through streams
 var spline = require('./service/spline');
-var merge = require('./service/merge');
 
-// shared canvas.
-var Canvas = require('canvas');
-var canvas = canvas(500, 500);
+// second in-memory graft channel to merge channels in.
+var merge = Graft();
 
 // handle pubsub
-var broker = require('./lib/broker')
-
-var through = require('through2');
+var broker = require('./lib/broker');
 
 // the broker is just a service
-var stream = graft.pipe(broker());
+var brokerStream = graft.pipe(broker());
 
 // we receive a subscribe message over graft
-stream.on('subscribe', function(req, done) {
+brokerStream.on('subscribe', function(req, done) {
   var msg = req.msg;
 
   // send the initial canvas to the client
@@ -46,17 +50,11 @@ stream.on('subscribe', function(req, done) {
 });
 
 // all draw events from all clients
-graft.readable('stroke').pipe(through.obj(function(req, enc, done) {
-  var msg = req.msg;
-
-  // start a new stroke, turn it into a spline
-  // and merge into the shared data.
-  msg.stroke.pipe(spline()).pipe(merge);
-
-  done();
-}));
-
-// TODO: should merge just be a sub-graft?
-merge.pipe(through.obj(function(req, enc, done) {
-
-}));
+//
+// start a new stroke, turn it into a spline
+// and merge into the shared data.
+graft
+  .pipe(where({topic: 'stroke'}))
+  .pipe(prop('msg'))
+  .pipe(spline())
+  .pipe(merge);
