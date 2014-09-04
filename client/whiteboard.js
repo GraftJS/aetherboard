@@ -1,10 +1,13 @@
 var CanvasSurface = require('famous/surfaces/CanvasSurface');
+var Sync = require('./sync');
 
 function Whiteboard(options) {
   CanvasSurface.apply(this, arguments);
 
-  this.ctx = this.getContext('2d');
+  this.sync = Sync();
 
+  this.ctx = this.getContext('2d');
+  
   this.ctx.fillStyle = "solid";
   this.ctx.strokeStyle = "#000000";
   this.ctx.lineWidth = 5;
