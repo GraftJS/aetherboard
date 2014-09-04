@@ -14,7 +14,8 @@ module.exports = function() {
 
     spline.draw(ctx);
 
-    function pushOp(op) { this.push(op); }
     ctx.operations().forEach(pushOp.bind(this));
+    function pushOp(op) { this.push(op); }
+    this.push(null);
   });
 };

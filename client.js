@@ -33,20 +33,7 @@ var inputStream = input(ui.sync);
 // send my strokes to the server
 //inputStream.pipe(drawInput);
 
-/*
-// apply everyone's strokes to the canvas
-drawSync
-  .pipe(prop('segments'))
-  .pipe(spline())
-  .pipe(invoke(ui.ctx));
-*/
-
-var splineMap = map(function(chunk) {
-  return (chunk
-    .pipe(normPoints())
-    .pipe(spline()));
-  });
-
 inputStream
-  .pipe(splineMap)
-  .pipe(invoke(ui.ctx));
+  .pipe(prop('segments')
+    .pipe(spline())
+    .pipe(invoke(ui.ctx)));
