@@ -24,10 +24,10 @@ var modifier = new Modifier(modOpts);
 
 // require my services
 var sync = require('./sync');
-var input = require('../service/input');
-var prop = require('../service/property');
-var invoke = require('../service/invoke');
-var spline = require('../service/spline');
+var input = require('../input');
+var prop = require('../property');
+var invoke = require('../invoke');
+var spline = require('../spline');
 
 // set up graft, websockets and return channel streams.
 var graft = require('graft')();
