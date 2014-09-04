@@ -9,15 +9,14 @@ var through = require('through2');
 //
 // shared canvas.
 var Canvas = require('canvas');
-var canvas = canvas(500, 500);
+var canvas = Canvas(500, 500);
 
 // Set up main graft instance
 var Graft = require('graft');
 var graft = Graft();
 
 // listen on websockets, in addition to in-mem
-var ws = require('graft/websocket');
-var server = ws.server('/graft');
+var ws = require('graft/ws');
 
 server.pipe(graft);
 

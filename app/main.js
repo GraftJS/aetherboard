@@ -31,10 +31,10 @@ var spline = require('../service/spline');
 
 // set up graft, websockets and return channel streams.
 var graft = require('graft')();
-var client = require('graft/websockets').client();
-var drawInput = stream.Readable();
-var drawSync = stream.Writeable();
-var pngStream = stream.Writeable();
+//var client = require('graft/ws').client();
+var drawInput = graft.ReadChannel();
+var drawSync = graft.WriteChannel();
+var pngStream = graft.WriteChannel();
 
 graft.write({
   topic: 'subscribe',
@@ -44,22 +44,29 @@ graft.write({
 });
 
 // initial image loaded into the canvas
-pngStream.pipe(whiteboard.image);
+//pngStream.pipe(whiteboard.image);
 
 // normalize mouse input into strokes+segments
 var inputStream = input(sync);
 
 // send my strokes to the server
-inputStream.pipe(drawInput);
+//inputStream.pipe(drawInput);
 
+/*
 // apply everyone's strokes to the canvas
 drawSync
   .pipe(prop('segments'))
   .pipe(spline())
   .pipe(invoke(whiteboard.ctx));
-
+*/
 // apply my strokes to the canvas
 // TODO: write to scratch-space canvas first
+//
+var log = through(function (chunk, encoding, callback) {
+  this.push(chunk);
+  return callback();
+});
+
 inputStream
   .pipe(prop('segments'))
   .pipe(spline())

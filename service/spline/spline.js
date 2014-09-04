@@ -6,13 +6,16 @@ var through = require('through2');
 
 module.exports = function() {
   return through.obj(function(chunk, enc, done) {
-    console.log(chunk);
     var points = [];
     var spline;
     var that = this;
 
     chunk.pipe(through.obj(function(_data, enc, done) { 
-      points.push(_data);
+      var pos = _data.position;
+      points.push({
+        x: pos[0],
+        y: pos[1]
+      });
       done();
     }, function() {
       spline = new Spline({points: points, duration:15000});
