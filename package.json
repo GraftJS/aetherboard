@@ -33,7 +33,6 @@
     "highland": "^1.28.0",
     "norma": "^0.2.6",
     "readable-stream": "^1.0.31",
-    "through2": "^0.6.1",
-    "through2-log": "0.0.2"
+    "through2": "^0.6.1"
   }
 }
