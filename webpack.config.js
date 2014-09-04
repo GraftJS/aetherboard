@@ -1,7 +1,7 @@
 module.exports = {
   cache: true,
   context: __dirname,
-  entry: './app/main.js',
+  entry: './client.js',
   output: {
     path: __dirname + '/dist/',
     filename: 'bundle.js',
