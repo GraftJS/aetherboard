@@ -11,8 +11,8 @@ GenericSync.register({
   scroll : ScrollSync
 });
 
-var genericSync = new GenericSync(['mouse', 'touch', 'scroll']);
-
-Engine.pipe(genericSync);
-
-module.exports = genericSync;
+module.exports = function() {
+  var genericSync = new GenericSync(['mouse', 'touch', 'scroll']);
+  Engine.pipe(genericSync);
+  return genericSync;
+};

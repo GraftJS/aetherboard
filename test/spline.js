@@ -1,7 +1,8 @@
 'use strict';
 
 var fs = require('fs');
-var service = require('../../../service/spline/serviceMemory');
+var Graft = require('graft');
+var spline = require('../spline');
 
 
 describe('spline memory service test', function() {

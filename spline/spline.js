@@ -1,30 +1,29 @@
 'use strict';
 
-var ctx = require('./canvas')();
+var Canvas = require('./canvas');
 var Spline = require('./bezier-spline');
 var through = require('through2');
 
 module.exports = function() {
   return through.obj(function(chunk, enc, done) {
     var points = [];
-    var spline;
     var that = this;
 
-    chunk.pipe(through.obj(function(_data, enc, done) { 
-      var pos = _data.position;
-      points.push({
-        x: pos[0],
-        y: pos[1]
-      });
+    chunk.pipe(through.obj(function(_data, enc, done) {
+      points.push(_data);
       done();
     }, function() {
-      spline = new Spline({points: points, duration:15000});
+
+      var ctx = Canvas();
+      var spline = new Spline({points: points, duration:15000});
+
       spline.draw(ctx);
-      ctx.operations().forEach(function(operation) { that.push(operation); });
       points = [];
+
+      ctx.operations().forEach(function(operation) {
+        that.push(operation);
+      });
     }));
     done();
   });
 };
-
-

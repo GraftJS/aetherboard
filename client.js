@@ -6,6 +6,7 @@ var input = require('./input');
 var prop = require('./property');
 var invoke = require('./invoke');
 var spline = require('./spline');
+var normPoints = require('./lib/normalize-points');
 
 // set up graft, websockets and return channel streams.
 var graft = require('graft')();
@@ -41,5 +42,6 @@ drawSync
 
 inputStream
   .pipe(prop('segments'))
+  .pipe(normPoints())
   .pipe(spline())
   .pipe(invoke(ui.ctx));
