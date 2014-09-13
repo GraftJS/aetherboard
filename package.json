@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "canvas": "^1.1.6",
-    "graft": "0.0.5",
+    "graft": "^0.2.0",
+    "graft-broker": "0.0.1",
     "highland": "^1.28.0",
     "norma": "^0.2.6",
     "readable-stream": "^1.0.31",

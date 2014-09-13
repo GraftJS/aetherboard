@@ -1,4 +1,5 @@
 // file: main entry point for webpack
+var _ = require('highland');
 
 // require my services
 var ui = require('./ui');
@@ -29,6 +30,8 @@ graft.write({
 
 // normalize mouse input into strokes+segments
 var inputStream = input(ui.sync);
+function drawStroke(s) {
+  return s.pluck('segments').
 
 // send my strokes to the server
 //inputStream.pipe(drawInput);

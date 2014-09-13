@@ -18,6 +18,8 @@ var graft = Graft();
 // listen on websockets, in addition to in-mem
 var ws = require('graft/ws');
 
+var server = ws.server('/path');
+
 server.pipe(graft);
 
 // individual stream through streams
@@ -26,8 +28,6 @@ var spline = require('./service/spline');
 // second in-memory graft channel to merge channels in.
 var merge = Graft();
 
-// handle pubsub
-var broker = require('./lib/broker');
 
 // the broker is just a service
 var brokerStream = graft.pipe(broker());
