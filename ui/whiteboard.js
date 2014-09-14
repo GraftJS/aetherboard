@@ -1,30 +1,44 @@
-var CanvasSurface = require('famous/surfaces/CanvasSurface');
-var Sync = require('./sync');
+var Canvas = require('famous/surfaces/CanvasSurface');
+var Sync   = require('./sync');
+var _      = require('lodash');
 
 function Whiteboard(options) {
-  CanvasSurface.apply(this, arguments);
+  Canvas.apply(this, arguments);
 
   this.sync = Sync();
 
-  this.ctx = this.getContext('2d');
-  
-  this.ctx.fillStyle = "solid";
-  this.ctx.strokeStyle = "#000000";
-  this.ctx.lineWidth = 5;
-  this.ctx.lineCap = "round";
+  this.on('deploy', this.initialize.bind(this));
 }
 
-Whiteboard.prototype = Object.create(CanvasSurface.prototype);
+Whiteboard.prototype = Object.create(Canvas.prototype);
 Whiteboard.prototype.constructor = Whiteboard;
 
-Whiteboard.prototype.loadPNG = function(buf) {
-    var ctx = this.ctx;
-    var blob = new Blob([buf], {type: 'image/png'});
-    var url = URL.createObjectURL(blob);
-    var img = new Image();
+Whiteboard.prototype.initialize = function() {
+  var ctx = this.getContext('2d');
 
-    img.onload = function() {
-      ctx.drawImage(this, 0, 0);
+  ctx.fillStyle = "#FF0000";
+  ctx.strokeStyle = "#FF0000";
+  ctx.lineWidth = 5;
+  ctx.lineCap = "round";
+};
+
+Whiteboard.prototype.draw = function() {
+  var ctx = this.getContext('2d');
+
+  var method = _.first(arguments);
+  var rest = _.rest(arguments);
+
+  ctx[method] && ctx[method].apply(ctx, rest);
+};
+
+Whiteboard.prototype.loadPNG = function(buf) {
+  var ctx = this.getContext('2d');
+  var blob = new Blob([buf], {type: 'image/png'});
+  var url = URL.createObjectURL(blob);
+  var img = new Image();
+
+  img.onload = function() {
+    ctx.drawImage(this, 0, 0);
       URL.revokeObjectURL(url);
     }.bind(this);
 

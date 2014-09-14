@@ -12,7 +12,13 @@ var Whiteboard = require('./whiteboard');
 
 // create the main famous context
 var mainContext = Engine.createContext();
-var modOpts = { size: [500, 500], origin: [0.5, 0.5] };
+
+
+var modOpts = {
+  size: [500, 500],
+  origin: [0.5, 0.5]
+};
+
 var whiteboard = new Whiteboard();
 var modifier = new Modifier(modOpts);
 
