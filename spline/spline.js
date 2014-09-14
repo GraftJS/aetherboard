@@ -4,18 +4,25 @@ var through = require('through2');
 
 module.exports = function() {
   var points = [];
-  var ctx = Canvas();
 
   return through.obj(function(chunk, enc, done) {
     points.push(chunk);
+
+    this.push('draw', 'fillRect', 0,0,150,75);
+    if (points.length >= 2) {
+      var ctx = Canvas();
+      var spline = new Spline({points: points, duration:15000});
+
+      spline.draw(ctx);
+
+      ctx.operations().forEach(pushOp.bind(this));
+    } else {
+      //this.push('clearRect', 0, 0, 499, 499);
+    }
+
     done();
-  }, function() {
-    var spline = new Spline({points: points, duration:15000});
 
-    spline.draw(ctx);
-
-    ctx.operations().forEach(pushOp.bind(this));
-    function pushOp(op) { this.push(op); }
-    this.push(null);
+    function pushOp(op) { this.push(['draw'].concat(op)); }
   });
+
 };
