@@ -34,6 +34,7 @@
     "highland": "^1.28.0",
     "norma": "^0.2.6",
     "readable-stream": "^1.0.31",
+    "send": "^0.9.1",
     "through2": "^0.6.1",
     "through2-map": "^1.4.0"
   }

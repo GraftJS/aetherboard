@@ -6,54 +6,56 @@
 * of changes to be applied everywhere.
 */
 var through = require('through2');
-//
-// shared canvas.
-var Canvas = require('canvas');
-var canvas = Canvas(500, 500);
+var send = require('send');
+var url = require('url');
 
-// Set up main graft instance
+var Canvas = require('canvas');
+var canvas = new Canvas(500, 500);
+
 var Graft = require('graft');
 var graft = Graft();
-
-// listen on websockets, in addition to in-mem
-var ws = require('graft/ws');
-
-var server = ws.server('/path');
-
-server.pipe(graft);
-
-// individual stream through streams
-var spline = require('./service/spline');
-
-// second in-memory graft channel to merge channels in.
 var merge = Graft();
 
+var http = require('http');
+var server = http.createServer();
+var ws = require('graft/ws').server({server: server});
 
-// the broker is just a service
-var brokerStream = graft.pipe(broker());
+ws.pipe(graft);
 
-// we receive a subscribe message over graft
-brokerStream.on('subscribe', function(req, done) {
-  var msg = req.msg;
+graft.where({topic: 'subscribe'}, subscribe());
 
-  // send the initial canvas to the client
-  canvas.pngStream().pipe(msg.initialCanvas);
+server.on('request', handleRequest);
+server.listen(3000);
 
-  // send all clients' draw events to graft.
-  msg.drawInput.pipe(graft);
+function subscribe() {
+  return through.obj(function(msg, enc, done) {
+    canvas.pngStream().pipe(msg.initialCanvas);
 
-  // send future merged draw events to the client
-  merge.pipe(msg.drawnSync);
+    msg.strokeInput.pipe(graft);
 
-  done();
-});
+    merge.pipe(msg.strokeSync);
 
-// all draw events from all clients
-//
-// start a new stroke, turn it into a spline
-// and merge into the shared data.
-graft
-  .pipe(where({topic: 'stroke'}))
-  .pipe(prop('msg'))
-  .pipe(spline())
-  .pipe(merge);
+    this.push(msg);
+    done();
+  });
+}
+
+function handleRequest(req, res){
+  console.log(req.method, req.url);
+
+  function error(err) {
+    res.statusCode = err.status || 500;
+    res.end(err.message);
+  }
+
+  function redirect() {
+    res.statusCode = 301;
+    res.setHeader('Location', req.url + '/');
+    res.end('Redirecting to ' + req.url + '/');
+  }
+
+  send(req, url.parse(req.url).pathname, {root: __dirname + '/dist'})
+    .on('error', error)
+    .on('directory', redirect)
+    .pipe(res);
+}
