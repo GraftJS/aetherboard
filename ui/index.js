@@ -13,13 +13,11 @@ var Whiteboard = require('./whiteboard');
 // create the main famous context
 var mainContext = Engine.createContext();
 
-
 var modOpts = {
-  size: [500, 500],
   origin: [0.5, 0.5]
 };
 
-var whiteboard = new Whiteboard();
+var whiteboard = new Whiteboard({ canvasSize: [500,500]});
 var modifier = new Modifier(modOpts);
 
 // add the modifier and then the surface to the tree.
