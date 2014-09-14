@@ -8,7 +8,7 @@ module.exports = function Property() {
   var prop = args.property;
 
   return through.obj(function(chunk, enc, done) {
-    if (chunk[prop]) { this.push(chunk[prop]); }
+    this.push(chunk[prop]);
     done();
   });
 };
