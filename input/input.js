@@ -1,5 +1,4 @@
 var Readable = require('readable-stream').Readable;
-
 module.exports = function Input(sync) {
   var current;
   var strokes = new Readable({objectMode: true});
