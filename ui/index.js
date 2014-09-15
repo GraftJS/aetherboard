@@ -14,6 +14,7 @@ var Whiteboard = require('./whiteboard');
 var mainContext = Engine.createContext();
 
 var modOpts = {
+  size: [500, 500],
   origin: [0.5, 0.5]
 };
 
