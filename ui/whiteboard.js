@@ -16,9 +16,9 @@ Whiteboard.prototype.constructor = Whiteboard;
 Whiteboard.prototype.initialize = function() {
   var ctx = this.getContext('2d');
 
-  ctx.fillStyle = "solid";
+  ctx.fillStyle = "#000000";
   ctx.strokeStyle = "#000000";
-  ctx.lineWidth = 5;
+  ctx.lineWidth = 1;
   ctx.lineCap = "round";
 };
 

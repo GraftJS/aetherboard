@@ -8,7 +8,6 @@ module.exports = function() {
   return through.obj(function(chunk, enc, done) {
     points.push(chunk);
 
-    this.push('draw', 'fillRect', 0,0,150,75);
     if (points.length >= 2) {
       var ctx = Canvas();
       var spline = new Spline({points: points, duration:15000});
@@ -17,7 +16,7 @@ module.exports = function() {
 
       ctx.operations().forEach(pushOp.bind(this));
     } else {
-      //this.push('clearRect', 0, 0, 499, 499);
+      this.push('draw', 'clearRect', 0, 0, 499, 499);
     }
 
     done();
