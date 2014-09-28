@@ -16,8 +16,11 @@ Whiteboard.prototype.constructor = Whiteboard;
 Whiteboard.prototype.initialize = function() {
   var ctx = this.getContext('2d');
 
+  this.busyColor = "rgba(173,43,48, 0.75)";
+  this.doneColor = "rgba(173,43,48, 1)";
+  
   ctx.fillStyle = "#000000";
-  ctx.strokeStyle = "#000000";
+  ctx.strokeStyle = this.busyColor;
   ctx.lineWidth = 1;
   ctx.lineCap = "round";
 };

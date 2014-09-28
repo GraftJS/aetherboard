@@ -6,22 +6,23 @@ module.exports = function() {
   var points = [];
 
   var ctx = Canvas();
-  return through.obj(function(chunk, enc, done) {
-    points.push(chunk);
 
-    if (points.length >= 2) {
-      var spline = new Spline({points: points, duration:15000});
+  return through.obj(function(line, enc, done) {
+    var ops = this;
+    line.segments.on('data', function(chunk) {
+      if (!points.length) {
+        ops.push(['draw', 'beginPath']);
+        ops.push(['draw', 'moveTo', chunk.x, chunk.y]);
+      } else {
+        ops.push(['draw', 'lineTo', chunk.x, chunk.y]);
+        ops.push(['draw', 'stroke']);
+      }
 
-      spline.draw(ctx);
-
-      ctx.operations().forEach(pushOp.bind(this));
-    } else {
-      this.push('draw', 'clearRect', 0, 0, 499, 499);
-    }
-
-    done();
-
-    function pushOp(op) { this.push(['draw'].concat(op)); }
+      points.push(chunk);
+    });
+    line.segments.on('end', function() {
+      points = [];
+      done();
+    });
   });
-
 };

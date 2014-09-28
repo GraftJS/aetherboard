@@ -17,9 +17,8 @@ module.exports = function Input(sync) {
 
   sync.on('update', function(data) {
     var chunk = {
-      position: [data.offsetX, data.offsetY],
-      delta: data.delta,
-      velocity: data.velocity
+      x: data.offsetX,
+      y: data.offsetY
     };
     current.segments.push(chunk);
   });

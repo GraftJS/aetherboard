@@ -14,11 +14,14 @@ var Whiteboard = require('./whiteboard');
 var mainContext = Engine.createContext();
 
 var modOpts = {
-  size: [500, 500],
-  origin: [0.5, 0.5]
+  size: [1920, 1080],
+  origin: [0.5, 0.5],
+  align: [0.5, 0.5]
 };
 
-var whiteboard = new Whiteboard({ canvasSize: [500,500]});
+var whiteboard = new Whiteboard({
+  canvasSize: [1920, 1080]
+});
 var modifier = new Modifier(modOpts);
 
 // add the modifier and then the surface to the tree.

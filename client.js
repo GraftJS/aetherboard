@@ -4,7 +4,6 @@ var through = require('through2');
 // require my services
 var ui = window.ui = require('./ui');
 var input = require('./input');
-var prop = require('dotpath-stream');
 var invoke = require('./invoke');
 var spline = require('./spline');
 var map = require('through2-map');
@@ -35,7 +34,5 @@ var inputStream = input(ui.sync);
 //inputStream.pipe(strokeInput);
 
 inputStream
-  .pipe(prop('segments'))
-  .pipe(normPoints())
   .pipe(spline())
   .pipe(invoke(ui));
