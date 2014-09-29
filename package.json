@@ -28,13 +28,16 @@
     "webpack-dev-server": "^1.4.10"
   },
   "dependencies": {
-    "sculpt": "^0.1.6",
     "canvas": "^1.1.6",
     "graft": "^0.2.0",
+    "highland": "^1.29.0",
     "lodash": "^2.4.1",
     "norma": "^0.2.6",
     "readable-stream": "^1.0.31",
+    "sculpt": "^0.1.6",
     "send": "^0.9.1",
-    "through2": "^0.6.1"
+    "streams2": "^0.1.1",
+    "through2": "^0.6.1",
+    "webpack": "^1.4.4"
   }
 }

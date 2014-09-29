@@ -13,21 +13,28 @@ var server = http.createServer();
 var Canvas = require('canvas');
 var canvas = new Canvas(500, 500);
 
+var invoke = require('./invoke');
+var spline = require('./spline');
+
 var Graft = require('graft');
 
 var graft = Graft();
+var merge = Graft();
 
 require('graft/ws')
   .server({server: server})
   .pipe(graft);
 
-graft.where({topic: 'subscribe'}, subscribe());
+var drawOnCanvas = through.obj()
+  .pipe(spline())
+  .pipe(through.obj(function(chunk, enc, done) { done(); }));
 
-var merge = Graft();
+graft.where({topic: 'subscribe'}, subscribe());
+graft.where({topic: 'stroke'}, spline());
 
 function subscribe() {
   return through.obj(function(msg, enc, done) {
-    canvas.pngStream().pipe(msg.initialCanvas);
+    //canvas.pngStream().pipe(msg.initialCanvas);
 
     msg.strokeInput.pipe(graft);
 
@@ -37,6 +44,5 @@ function subscribe() {
     done();
   });
 }
-
 
 server.on('request', require('./handler')).listen(3000);

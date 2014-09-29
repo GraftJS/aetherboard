@@ -7,6 +7,7 @@ module.exports = function Input(sync) {
 
   sync.on('start', function(data) {
     current = {
+      topic: 'stroke',
       size: 0.5,
       color: 1,
       segments: new Readable({objectMode: true})
@@ -24,7 +25,9 @@ module.exports = function Input(sync) {
   });
 
   sync.on('end', function(data) {
+    console.trace();
     current.segments.push(null);
+    current = null;
   });
 
   return strokes;
