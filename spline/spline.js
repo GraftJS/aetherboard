@@ -1,15 +1,14 @@
 //var Canvas = require('./canvas');
-var Spline = require('./bezier-spline');
+//var Spline = require('./bezier-spline');
 var through = require('through2');
 
 module.exports = function() {
   var points = [];
 
   //var ctx = Canvas();
-
   return through.obj(function(line, enc, done) {
-    console.log(line);
     var ops = this;
+
     line.segments.on('data', function(chunk) {
       if (!points.length) {
         ops.push(['draw', 'beginPath']);

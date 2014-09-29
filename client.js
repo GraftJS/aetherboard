@@ -1,6 +1,6 @@
 // file: main entry point for webpack
 var through = require('through2');
-var _ = require('highland');
+var stream = require('readable-stream');
 
 // require my services
 var ui = window.ui = require('./ui');
@@ -12,11 +12,12 @@ var spline = require('./spline');
 var graft = require('graft')();
 
 var client = require('graft/ws').client({port: 3000});
-graft.pipe(client);
 
-var strokeInput = graft.ReadChannel();
-var strokeSync = graft.WriteChannel();
-var initialCanvas = graft.WriteChannel();
+var strokeInput = graft.WriteChannel();
+var strokeSync = graft.ReadChannel();
+var initialCanvas = graft.ReadChannel();
+
+graft.where({topic: 'subscribe'}, client);
 
 graft.write({
   topic: 'subscribe',
@@ -28,20 +29,11 @@ graft.write({
 // initial image loaded into the canvas
 // initialCanvas.pipe(ui.image);
 
-var inputStream = _(input(ui.sync));
+var inputStream = input(ui.sync);
 
-var drawStream = inputStream.fork();
-var sendStream = inputStream.fork();
-
-sendStream
-  .pipe(graft)
-  .pipe(through.obj(log))
-
-drawStream
+inputStream
   .pipe(spline())
   .pipe(invoke(ui));
 
-function log(chunk, enc, done) {
-  console.log(chunk);
-  done();
-}
+inputStream
+  .pipe(strokeInput);
