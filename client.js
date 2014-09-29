@@ -31,12 +31,17 @@ graft.write({
 var inputStream = _(input(ui.sync));
 
 var drawStream = inputStream.fork();
-var sendStream = inputStream.observe();
+var sendStream = inputStream.fork();
 
+sendStream
+  .pipe(graft)
+  .pipe(through.obj(log))
 
 drawStream
   .pipe(spline())
   .pipe(invoke(ui));
 
-sendStream
-  .pipe(graft);
+function log(chunk, enc, done) {
+  console.log(chunk);
+  done();
+}

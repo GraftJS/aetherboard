@@ -25,12 +25,11 @@ require('graft/ws')
   .server({server: server})
   .pipe(graft);
 
-var drawOnCanvas = through.obj()
-  .pipe(spline())
-  .pipe(through.obj(function(chunk, enc, done) { done(); }));
-
 graft.where({topic: 'subscribe'}, subscribe());
-graft.where({topic: 'stroke'}, spline());
+
+graft.pipe(through.obj(onlyStroke))
+  .pipe(spline())
+  .pipe(through.obj(log))
 
 function subscribe() {
   return through.obj(function(msg, enc, done) {
@@ -40,9 +39,21 @@ function subscribe() {
 
     merge.pipe(msg.strokeSync);
 
-    this.push(msg);
     done();
   });
 }
 
 server.on('request', require('./handler')).listen(3000);
+
+function onlyStroke(msg, enc, done) {
+  console.log(msg.topic);
+  if (msg.topic === 'stroke') {
+    this.push(msg);
+  }
+  done();
+}
+
+function log(chunk, enc, done) {
+  console.log(chunk);
+  done(null, chunk);
+}

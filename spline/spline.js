@@ -8,6 +8,7 @@ module.exports = function() {
   //var ctx = Canvas();
 
   return through.obj(function(line, enc, done) {
+    console.log(line);
     var ops = this;
     line.segments.on('data', function(chunk) {
       if (!points.length) {
