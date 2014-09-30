@@ -12,7 +12,7 @@ GenericSync.register({
 });
 
 module.exports = function() {
-  var genericSync = new GenericSync(['mouse', 'touch', 'scroll']);
+  var genericSync = new GenericSync(['mouse', 'touch']);//, 'scroll']);
   Engine.pipe(genericSync);
   return genericSync;
 };

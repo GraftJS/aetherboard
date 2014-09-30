@@ -1,19 +1,20 @@
-var Readable = require('readable-stream').Readable;
+var streams  = require('readable-stream');
+var Readable = streams.Readable;
+var Graft    = require('graft');
+
 module.exports = function Input(sync) {
   var current;
-  var strokes = new Readable({objectMode: true});
-
-  strokes._read = function() {};
+  var strokes = new Graft();
 
   sync.on('start', function(data) {
     current = {
       topic: 'stroke',
       size: 0.5,
       color: 1,
-      segments: new Readable({objectMode: true})
+      segments: strokes.WriteChannel()
     };
-    current.segments._read = function() {};
-    strokes.push(current);
+
+    strokes.write(current);
   });
 
   sync.on('update', function(data) {
@@ -21,11 +22,12 @@ module.exports = function Input(sync) {
       x: data.offsetX,
       y: data.offsetY
     };
-    current.segments.push(chunk);
+    current.segments.write(chunk);
   });
 
   sync.on('end', function(data) {
     current.segments.push(null);
+    current.segments = null
     current = null;
   });
 

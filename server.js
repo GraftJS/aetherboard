@@ -25,15 +25,16 @@ require('graft/ws')
   .pipe(graft);
 
 graft.where({topic: 'subscribe'}, subscribe());
-graft.where({topic: 'stroke'}, stroke());
+graft.where({topic: 'stroke'}, strokes());
 
-function stroke() {
-  return spline().pipe(through.obj(log));
+function strokes() {
+  var service = Graft();
+  service.pipe(spline()).pipe(through.obj(log));
+  return service;
 }
 
 function subscribe() {
   return through.obj(function(msg, enc, done) {
-    console.log(msg.topic);
     //canvas.pngStream().pipe(msg.initialCanvas);
 
     msg.strokeInput.pipe(graft);
@@ -43,8 +44,6 @@ function subscribe() {
 }
 
 server.on('request', require('./handler')).listen(3000);
-
 function log(chunk, enc, done) {
-  console.log(chunk.topic);
-  done(null, chunk);
+  done(null);
 }

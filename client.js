@@ -33,7 +33,13 @@ var inputStream = input(ui.sync);
 
 inputStream
   .pipe(spline())
+  .pipe(through.obj(log))
   .pipe(invoke(ui));
 
 inputStream
   .pipe(strokeInput);
+
+function log(chunk, enc, done) {
+  console.log(chunk);
+  done(null, chunk);
+}
