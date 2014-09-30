@@ -19,6 +19,7 @@ var spline = require('./spline');
 var Graft = require('graft');
 
 var graft = Graft();
+var merge = Graft();
 
 require('graft/ws')
   .server({server: server})
@@ -29,7 +30,8 @@ graft.where({topic: 'stroke'}, strokes());
 
 function strokes() {
   var service = Graft();
-  service.pipe(spline()).pipe(through.obj(log));
+  service.pipe(merge);
+  //service.pipe(spline()).pipe(through.obj(log));
   return service;
 }
 
@@ -38,6 +40,7 @@ function subscribe() {
     //canvas.pngStream().pipe(msg.initialCanvas);
 
     msg.strokeInput.pipe(graft);
+    merge.pipe(msg.strokeSync);
 
     done();
   });
@@ -45,5 +48,6 @@ function subscribe() {
 
 server.on('request', require('./handler')).listen(3000);
 function log(chunk, enc, done) {
+  console.log(chunk);
   done(null);
 }

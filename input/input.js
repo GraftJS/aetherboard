@@ -26,8 +26,7 @@ module.exports = function Input(sync) {
   });
 
   sync.on('end', function(data) {
-    current.segments.push(null);
-    current.segments = null
+    current.segments.end();
     current = null;
   });
 

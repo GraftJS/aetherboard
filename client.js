@@ -13,33 +13,35 @@ var graft = require('graft')();
 
 var client = require('graft/ws').client({port: 3000});
 
-var strokeInput = graft.WriteChannel();
-var strokeSync = graft.ReadChannel();
-var initialCanvas = graft.ReadChannel();
-
 graft.where({topic: 'subscribe'}, client);
 
-graft.write({
+var msg = {
   topic: 'subscribe',
-  strokeInput: strokeInput,
-  strokeSync: strokeSync,
-  initialCanvas: initialCanvas
-});
+  strokeInput:  graft.WriteChannel(),
+  strokeSync: graft.ReadChannel(),
+  initialCanvas: graft.ReadChannel()
+};
+
+graft.write(msg);
 
 // initial image loaded into the canvas
 // initialCanvas.pipe(ui.image);
 
 var inputStream = input(ui.sync);
 
-inputStream
+var log = through.obj(function(chunk, enc, done) {
+  console.log(chunk);
+  done(null, chunk);
+});
+
+msg.strokeSync
   .pipe(spline())
-  .pipe(through.obj(log))
+  .pipe(log)
   .pipe(invoke(ui));
 
 inputStream
-  .pipe(strokeInput);
+  .pipe(msg.strokeInput);
 
-function log(chunk, enc, done) {
-  console.log(chunk);
-  done(null, chunk);
-}
+var sink = through.obj(function(chunk, enc, done) {
+  done();
+});

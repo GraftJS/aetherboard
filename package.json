@@ -32,6 +32,7 @@
     "graft": "^0.2.0",
     "highland": "^1.29.0",
     "lodash": "^2.4.1",
+    "merge-stream": "^0.1.6",
     "norma": "^0.2.6",
     "readable-stream": "^1.0.31",
     "sculpt": "^0.1.6",
