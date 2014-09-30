@@ -24,24 +24,18 @@ var msg = {
 
 graft.write(msg);
 
-// initial image loaded into the canvas
-// initialCanvas.pipe(ui.image);
+// var toArray = require('stream-to-array');
+// toArray(initialCanvas, function(err, arr) {
+//   if (err) { return false; }
+//   var buff = Buffer.concat(arr);
+//   ui.loadPng(buff);
+// }));
 
 var inputStream = input(ui.sync);
 
-var log = through.obj(function(chunk, enc, done) {
-  console.log(chunk);
-  done(null, chunk);
-});
-
 msg.strokeSync
   .pipe(spline())
-  .pipe(log)
   .pipe(invoke(ui));
 
 inputStream
   .pipe(msg.strokeInput);
-
-var sink = through.obj(function(chunk, enc, done) {
-  done();
-});
