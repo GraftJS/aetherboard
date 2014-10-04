@@ -30,10 +30,6 @@ graft.write(msg);
 //   ui.loadPng(buff);
 // }));
 
-input(ui.sync)
-  .pipe(spline())
-  .pipe(invoke(ui));
-  
 msg.strokeSync
   .pipe(spline())
   .pipe(invoke(ui));

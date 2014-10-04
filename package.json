@@ -29,6 +29,8 @@
   },
   "dependencies": {
     "canvas": "^1.1.6",
+    "debug": "^2.0.0",
+    "debug-stream": "^2.0.1",
     "graft": "^0.2.0",
     "highland": "^1.29.0",
     "lodash": "^2.4.1",

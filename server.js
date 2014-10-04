@@ -1,51 +1,56 @@
 /**
 * @file: server-side entry point.
-*
-* Builds a local canvas, and orchestrates
-* everybody's input into a single stream
-* of changes to be applied everywhere.
 */
 var through = require('through2');
 
+var domain = require('domain');
 var http = require('http');
 var server = http.createServer();
 
-var Canvas = require('canvas');
-var canvas = new Canvas(1920, 1080);
-
-var invoke = require('./invoke');
-var spline = require('./spline');
+var debug = require('debug')('ab:server');
+var debugStream = require('debug-stream')(debug);
 
 var Graft = require('graft');
-
 var graft = Graft();
 
-require('graft/ws')
-  .server({server: server})
-  .pipe(graft);
+var d = domain.create();
+d.on('error', debug.bind(null, 'connection error'));
+
+d.run(function() {
+  require('graft/ws')
+    .server({server: server})
+    .pipe(graft);
+});
 
 var merge = Graft();
 
 graft.where({topic: 'subscribe'}, subscribe());
-graft.where({topic: 'stroke'}, strokes());
+graft.where({topic: 'stroke'}, merge);
 
-function strokes() {
-  var service = Graft();
-  service.pipe(merge);
-
-  //service.pipe(spline())
-  //  .pipe(invoke(canvas));
-
-  return service;
-}
-
+var active = 0;
 function subscribe() {
   return through.obj(function(msg, enc, done) {
-    //canvas.pngStream().pipe(msg.initialCanvas);
-    msg.strokeInput.pipe(graft);
-    merge.pipe(msg.strokeSync);
 
-    done();
+    var client = active++;
+    debug('receive subscribe message: '+client);
+
+    var d = domain.create();
+
+    d.on('error', debug.bind(null, 'handle ending of client: '+client));
+
+    d.run(function() {
+
+      msg.strokeInput
+        .pipe(debugStream('incoming stroke %s from: '+client))
+        .pipe(graft);
+
+      merge
+        .pipe(debugStream('sending merged stroke %s to: '+client))
+        .pipe(msg.strokeSync);
+
+      done();
+    });
+
   });
 }
 
