@@ -7,16 +7,19 @@ var domain = require('domain');
 var http = require('http');
 var server = http.createServer();
 
-var debug = require('debug')('ab:server');
-var debugStream = require('debug-stream')(debug);
+var debug = require('debug');
+var log = debug('ab:server');
+var logStream = require('debug-stream')(log);
 
 var Graft = require('graft');
 var graft = Graft();
 
 var d = domain.create();
-d.on('error', debug.bind(null, 'connection error'));
+d.on('error', log.bind(null, 'connection error'));
 
 d.run(function() {
+  log('starting websocket server');
+
   require('graft/ws')
     .server({server: server})
     .pipe(graft);
@@ -25,14 +28,13 @@ d.run(function() {
 var merge = Graft();
 
 graft.where({topic: 'subscribe'}, subscribe());
-graft.where({topic: 'stroke'}, merge);
 
 var active = 0;
 function subscribe() {
   return through.obj(function(msg, enc, done) {
 
     var client = active++;
-    debug('receive subscribe message: '+client);
+    log('receive subscribe message: '+client);
 
     var d = domain.create();
 
@@ -41,11 +43,12 @@ function subscribe() {
     d.run(function() {
 
       msg.strokeInput
-        .pipe(debugStream('incoming stroke %s from: '+client))
-        .pipe(graft);
+        .pipe(logStream('incoming stroke %s from: '+client))
+        .pipe(merge);
+
 
       merge
-        .pipe(debugStream('sending merged stroke %s to: '+client))
+        .pipe(logStream('sending merged stroke %s to: '+client))
         .pipe(msg.strokeSync);
 
       done();

@@ -1,5 +1,7 @@
-//var Canvas = require('./canvas');
-//var Spline = require('./bezier-spline');
+var debug = require('debug');
+var log = debug('ab:spline');
+var verbose = debug('verbose:ab:spline');
+
 var through = require('through2');
 
 module.exports = function() {
@@ -10,6 +12,7 @@ module.exports = function() {
     var ops = this;
 
     line.segments.on('data', function(chunk) {
+      verbose('receive segment %d [%d, %d]', points.length, chunk.x, chunk.y);
       if (!points.length) {
         ops.push(['draw', 'beginPath']);
         ops.push(['draw', 'moveTo', chunk.x, chunk.y]);
@@ -21,6 +24,8 @@ module.exports = function() {
       points.push(chunk);
     });
     line.segments.on('end', function() {
+      log('end line segment %d', points.length);
+
       points = [];
       done();
     });

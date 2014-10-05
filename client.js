@@ -4,9 +4,10 @@ var through = require('through2');
 var stream = require('readable-stream');
 
 var ui = window.ui = require('./ui');
-var Debug = window.Debug = require('debug');
-var debug = Debug('ab:client');
-var debugStream = require('debug-stream')(debug);
+var debug = window.debug = require('debug');
+
+var log = debug('ab:client');
+var logStream = require('debug-stream')(log);
 
 var input = require('./input');
 var invoke = require('./invoke');
@@ -25,7 +26,7 @@ var msg = {
   initialCanvas: graft.ReadChannel()
 };
 
-debug('send subscribe message');
+log('send subscribe message');
 
 graft.write(msg);
 
@@ -37,10 +38,11 @@ graft.write(msg);
 // }));
 
 msg.strokeSync
-  .pipe(debugStream('incoming stroke %s'))
+  .on('end', log.bind(null, 'stroke sync ended'))
+  .pipe(logStream('incoming stroke'))
   .pipe(spline())
   .pipe(invoke(ui));
 
 input(ui.sync)
-  .pipe(debugStream('sending stroke'))
+  .pipe(logStream('sending stroke'))
   .pipe(msg.strokeInput);
