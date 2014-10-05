@@ -1,13 +1,11 @@
-var debug = require('debug');
-var log = debug('ab:spline');
+var debug   = require('debug');
+var log     = debug('ab:spline');
 var verbose = debug('verbose:ab:spline');
-
 var through = require('through2');
 
 module.exports = function() {
   var points = [];
 
-  //var ctx = Canvas();
   return through.obj(function(line, enc, done) {
     var ops = this;
 
@@ -23,6 +21,7 @@ module.exports = function() {
 
       points.push(chunk);
     });
+
     line.segments.on('end', function() {
       log('end line segment %d', points.length);
 

@@ -1,17 +1,13 @@
-var debug = require('debug');
-var log = debug('ab:input');
-var verbose = debug('verbose:ab:input');
-
-var streams  = require('readable-stream');
-
-var Readable = streams.Readable;
+var debug    = require('debug');
+var log      = debug('ab:input');
+var verbose  = debug('verbose:ab:input');
 var Graft    = require('graft');
 
 module.exports = function Input(sync) {
   var current;
   var count = 0;
   var segs = [];
-  var strokes = new Graft();
+  var strokes = Graft();
 
   sync.on('start', function(data) {
     count++;
