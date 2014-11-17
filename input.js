@@ -2,6 +2,8 @@ var debug    = require('debug');
 var log      = debug('ab:input');
 var verbose  = debug('verbose:ab:input');
 var Graft    = require('graft');
+var through  = require('through2');
+var Stream = require('readable-stream');
 
 module.exports = function Input(sync) {
   var current;
@@ -16,7 +18,7 @@ module.exports = function Input(sync) {
       topic: 'stroke',
       size: 0.5,
       color: 1,
-      segments: strokes.WriteChannel()
+      segments: through.obj()
     };
 
     strokes.write(current);

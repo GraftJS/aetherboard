@@ -22,14 +22,24 @@ module.exports = function subscribe() {
 
     d.run(function() {
 
-      msg.strokeInput
-        .pipe(logStream('incoming stroke %s from: '+client))
-        .pipe(merge);
-
       merge
         .pipe(logStream('sending merged stroke %s to: '+client))
         .pipe(msg.strokeSync);
 
+
+      msg.strokeInput
+        .pipe(logStream('incoming stroke %s from: '+client))
+        .pipe(through.obj(function(chunk, enc, done) {
+          var msg = {
+            topic: chunk.topic,
+            size: chunk.size,
+            color: chunk.color,
+            segments: through.obj()
+          };
+          chunk.segments.pipe(msg.segments);
+          merge.write(msg);
+          done();
+        }));
       done();
     });
   });
