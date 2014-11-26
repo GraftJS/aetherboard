@@ -18,13 +18,13 @@ module.exports = function subscribe() {
 
     var d = domain.create();
 
-    d.on('error', function() { log('handle ending of client: '+client); });
+    d.on('error', function(err) { log('ending of client '+client+' with error: '+err); });
 
     d.run(function() {
 
       merge
-        .on('error', function() { log('error on sending merged stroke'); })
         .pipe(logStream('sending merged stroke %s to: '+client))
+        .on('error', function() { log('error on sending merged stroke'); })
         .pipe(msg.strokeSync);
 
       msg.strokeInput
