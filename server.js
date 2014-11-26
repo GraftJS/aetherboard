@@ -14,7 +14,7 @@ var subscribe = require('./subscribe');
 graft.where({topic: 'subscribe'},  subscribe());
 
 domain.create()
-  .on('error', log.bind(null, 'connection error'))
+  .on('error', function() { log('connection error'); })
   .run(function() {
     log('starting websocket server');
 

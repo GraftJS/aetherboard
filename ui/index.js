@@ -15,8 +15,8 @@ var mainContext = Engine.createContext();
 
 var modOpts = {
   size: [1920, 1080],
-//  origin: [0.5, 0.5],
-//  align: [0.5, 0.5]
+  origin: [0.5, 0.5],
+  align: [0.5, 0.5]
 };
 
 var whiteboard = new Whiteboard({
@@ -25,7 +25,7 @@ var whiteboard = new Whiteboard({
 var modifier = new Modifier(modOpts);
 
 // add the modifier and then the surface to the tree.
-mainContext 
+mainContext
   .add(modifier)
   .add(whiteboard);
 

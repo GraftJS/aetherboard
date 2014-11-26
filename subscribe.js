@@ -18,7 +18,9 @@ module.exports = function subscribe() {
 
     var d = domain.create();
 
-    d.on('error', debug.bind(null, 'handle ending of client: '+client));
+    d.on('error', function() {
+      log('handle ending of client: '+client);
+    });
 
     d.run(function() {
 
