@@ -13,6 +13,7 @@ module.exports = function subscribe() {
 
   return through.obj(function(msg, enc, done) {
 
+
     var client = active++;
     log('receive subscribe message: '+client);
 
@@ -22,10 +23,12 @@ module.exports = function subscribe() {
 
     d.run(function() {
 
-      merge
-        .pipe(logStream('sending merged stroke %s to: '+client))
-        .on('error', function() { log('error on sending merged stroke'); })
-        .pipe(msg.strokeSync);
+      msg._session.on('close' , function() {
+        merge.unpipe(msg.strokeSync);
+        msg.strokeInput.unpipe();
+      });
+
+      merge.pipe(msg.strokeSync);
 
       msg.strokeInput
         .pipe(logStream('incoming stroke %s from: '+client))
