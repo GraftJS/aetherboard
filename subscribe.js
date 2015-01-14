@@ -6,13 +6,12 @@ var debug     = require('debug');
 var log       = debug('ab:subscribe');
 var logStream = require('debug-stream')(log);
 
-module.exports = function subscribe() {
-  var merge = graft();
+module.exports = function subscribe(merge) {
+  var merge = merge || graft();
 
   var active = 0;
 
   return through.obj(function(msg, enc, done) {
-
 
     var client = active++;
     log('receive subscribe message: '+client);
