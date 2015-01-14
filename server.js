@@ -7,11 +7,19 @@ var domain    = require('domain');
 var http      = require('http');
 var server    = http.createServer();
 
-var graft     = require('graft')();
+var canvas    = new (require('canvas'))(1920, 1080);
+
+var graft     = require('graft');
 var ws        = require('graft/ws');
 var subscribe = require('./subscribe');
+var invoke    = require('./invoke');
 
-graft.where({topic: 'subscribe'},  subscribe());
+var main      = graft();
+var merge     = graft();
+
+main.where({topic: 'subscribe'},  subscribe(merge));
+
+merge.pipe(invoke(canvas));
 
 domain.create()
   .on('error', function() { log('connection error'); })
@@ -19,7 +27,7 @@ domain.create()
     log('starting websocket server');
 
     ws.server({server: server})
-      .pipe(graft);
+      .pipe(main);
   });
 
 server.on('request', require('./handler')).listen(3000);
