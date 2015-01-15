@@ -7,6 +7,11 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: "/dist/"
   },
+  resolve: {
+    alias: {
+      famous: 'famous/src'
+    }
+  },
   module: {
     loaders: [
       // the index.html file will be copied to dist/
