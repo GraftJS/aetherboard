@@ -1,4 +1,4 @@
-__warning: this project still under major development, and it is not production ready yet.__
+__warning: this project still under major development, and it is not ready for use yet.__
 
 ## AetherBoard
 
@@ -16,17 +16,6 @@ While it is primarily a productivity tool, it is also a test-bed for [Graft](htt
 
 ---
 
-### Motivation
-
-This project was founded by [Adrian Rossouw](http://daemon.co.za) (a co-founder of the Graft project), after an international business trip to the [Wayfinder](http://wayfinder.co) offices.
-
-He realized that the most valuable use of that time was being able to stand around a whiteboard with his team members, evaluating and exploring solutions and system designs.
-
-Unhappy with the options available, he decided to scratch his own itch, and build the tool he really needed.
-
-He chose the name AetherBoard because it was designed as a sort of companion app to the erstwhile EtherPad (which was eventually absorbed into Google Wave).
-
----
 
 ### Planned Features
 
@@ -60,8 +49,12 @@ git clone https://github.com/AetherBoard/AetherBoard
 rm -rf .git # optionally remove git history  
 npm install # install dependencies  
 ```
+
 ####Development
-Run the dev server with ```webpack-dev-server```
+
+Run the server side component with ```node server.js```
+
+Run the webpack dev server with ```webpack-dev-server```
 
 Go to the dev server url : ```http://localhost:8080/webpack-dev-server/dist/bundle```
 
