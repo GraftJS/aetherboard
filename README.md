@@ -6,7 +6,7 @@ This open source project aims to build an web-based collaborative whiteboard.
 
 It will not require the installation of any plugins, or have any form of user management.
 
-While it is primarily a productivity tool, it is also a test-bed for [Graft](http://graft.io) and [jschan](https://github.com/graftjs/jschan)
+It is also a test-bed for [Graft](http://graft.io) and [jschan](https://github.com/graftjs/jschan)
 
 
 #### [Learn more about Graft](http://wayfinder.co/pathways/5365c71219e552110093ba31/graft-full-stack-javascript-through-microservices)
